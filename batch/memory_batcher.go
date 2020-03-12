@@ -1,6 +1,7 @@
 package batch
 
 import (
+	log "github.com/sirupsen/logrus"
 	"sync"
 	"time"
 )
@@ -16,6 +17,10 @@ type MemoryBatcher struct {
 }
 
 func NewMemoryBatch(interval time.Duration) *MemoryBatcher {
+	log.WithFields(log.Fields{
+		"interval": interval,
+	}).Debug("creating new memory batcher")
+
 	return &MemoryBatcher{
 		items:    []interface{}{},
 		interval: interval,
@@ -23,6 +28,8 @@ func NewMemoryBatch(interval time.Duration) *MemoryBatcher {
 }
 
 func (b *MemoryBatcher) Start() {
+	log.Debug("starting memory batcher")
+
 	b.JobsChan = make(chan []interface{})
 	b.quitChan = make(chan struct{})
 
@@ -41,6 +48,8 @@ func (b *MemoryBatcher) Start() {
 }
 
 func (b *MemoryBatcher) Stop() {
+	log.Debug("stopping memory batcher")
+
 	b.flushItems(func() {
 		defer close(b.JobsChan)
 		defer close(b.quitChan)
@@ -50,6 +59,8 @@ func (b *MemoryBatcher) Stop() {
 }
 
 func (b *MemoryBatcher) AddItem(item interface{}) {
+	log.Debug("adding item to memory batcher")
+
 	b.mutex.Lock()
 	go func(item interface{}) {
 		defer b.mutex.Unlock()
@@ -62,12 +73,17 @@ func (b *MemoryBatcher) flushItems(completion func()) {
 	go func(items []interface{}) {
 		defer b.mutex.Unlock()
 		if len(b.items) > 0 {
+			log.WithFields(log.Fields{
+				"count": len(b.items),
+			}).Debug("flushing items from memory batcher")
+
 			tmp := make([]interface{}, len(b.items))
 			copy(tmp, b.items)
 			b.JobsChan <- tmp
 			b.items = []interface{}{}
 
 			if completion != nil {
+				log.Debug("calling completion after flushing items")
 				completion()
 			}
 		}

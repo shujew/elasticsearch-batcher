@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"shujew/elasticsearch-batcher/batch"
 	"time"
@@ -24,6 +25,12 @@ func NewBulkClient(
 	flushInterval time.Duration,
 	) *BulkClient {
 
+	log.WithFields(log.Fields{
+		"esHost": esHost,
+		"timeout": httpTimeout,
+		"flushInterval": flushInterval,
+	}).Debug("creating new bulk es client")
+
 	client := BulkClient{
 		esHost: esHost,
 		httpClient: &http.Client{
@@ -36,11 +43,18 @@ func NewBulkClient(
 }
 
 func (c *BulkClient) SetBasicAuth(esUsername, esPassword string) {
+	log.WithFields(log.Fields{
+		"username": esUsername,
+		"password": esPassword,
+	}).Debug("setting basic auth on es client")
+
 	c.esUsername = esUsername
 	c.esPassword = esPassword
 }
 
 func (c *BulkClient) Start() {
+	log.Debug("starting bulk es client")
+
 	c.memoryBatcher.Start()
 
 	go func() {
@@ -55,15 +69,20 @@ func (c *BulkClient) Start() {
 }
 
 func (c *BulkClient) Stop() {
+	log.Debug("stopping bulk es client")
+
 	c.memoryBatcher.Stop()
 }
 
 func (c *BulkClient) IndexDocument(document map[string]interface{}) {
+	log.Debug("sending item to be indexed to bulk es client")
 	// actually schedules document for bulk indexing
 	c.memoryBatcher.AddItem(document)
 }
 
 func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
+	log.Debug("indexing documents from bulk es client to es host")
+
 	endpoint := fmt.Sprintf("%s/_bulk", c.esHost)
 	body := c.generateBulkPayload(documents)
 
