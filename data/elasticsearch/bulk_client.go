@@ -19,7 +19,13 @@ type BulkClient struct {
 	memoryBatcher *batch.MemoryBatcher
 }
 
-func NewBulkClient(
+var clientSingleton = newBulkClient(
+	"localhost",
+	30 * time.Second,
+	10 * time.Second,
+)
+
+func newBulkClient(
 	esHost        string,
 	httpTimeout   time.Duration,
 	flushInterval time.Duration,
@@ -40,6 +46,10 @@ func NewBulkClient(
 	}
 
 	return &client
+}
+
+func GetBulkClient() *BulkClient {
+	return clientSingleton
 }
 
 func (c *BulkClient) SetBasicAuth(esUsername, esPassword string) {
