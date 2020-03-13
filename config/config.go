@@ -11,7 +11,8 @@ import (
 // env var definition
 var debugEnvVar = "ESB_DEBUG"
 var httpPortEnvVar = "ESB_HTTP_PORT"
-var allowedHostsEnvVar = "ESB_ALLOWED_HOSTS"
+var allowAllOriginsEnvVar = "ESB_ALLOW_ALL_ORIGINS"
+var allowedOriginsEnvVar = "ESB_ALLOWED_ORIGINS"
 var esHostEnvVar = "ESB_ES_HOST"
 var esUsernameEnvVar = "ESB_ES_USERNAME"
 var esPasswordEnvVar = "ESB_ES_PASSWORD"
@@ -31,9 +32,14 @@ func GetHttpPort() string {
 	return getEnvValue(httpPortEnvVar, "8889")
 }
 
-func GetAllowedHosts() map[string]bool {
+func GetAllowAllOrigins() bool {
+	value := getEnvValue(allowAllOriginsEnvVar, "true")
+	return value == "true"
+}
+
+func GetAllowedOrigins() map[string]bool {
 	allowedHosts := map[string]bool{}
-	value := getEnvValue(allowedHostsEnvVar, "")
+	value := getEnvValue(allowedOriginsEnvVar, "")
 	for _, allowedHost := range strings.Split(value, ",") {
 		if len(allowedHost) > 0 {
 			allowedHosts[allowedHost] = true

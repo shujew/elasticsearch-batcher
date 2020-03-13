@@ -19,11 +19,11 @@ Elasticsearch-Batcher is easily configurable via global variables:
 - `ESB_HTTP_PORT`
   - Set it to desired port you want app to run on
   - Defaults to `8889`
-- `ESB_ALLOW_ALL_HOSTS`
+- `ESB_ALLOW_ALL_ORIGINS`
   - Set to `true` to allow any origin (CORS) 
   - Defaults to `true`
-- `ESB_ALLOWED_HOSTS`
-  - Comma separated list of allowed hosts (CORS) if `ESB_ALLOW_ALL_HOSTS=false`
+- `ESB_ALLOWED_ORIGINS`
+  - Comma separated list of allowed origins (CORS) if `ESB_ALLOW_ALL_HOSTS=false`
   - Defaults to an empty string
 - `ESB_ES_HOST`
   - protocol + hostname of ES cluster (e.g. http://mycluster.com)

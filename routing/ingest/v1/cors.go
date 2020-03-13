@@ -5,11 +5,12 @@ import (
 	"shujew/elasticsearch-batcher/config"
 )
 
-var AllowedHeaderOrigins = config.GetAllowedHosts()
+var AllowAllOrigins = config.GetAllowAllOrigins()
+var AllowedHeaderOrigins = config.GetAllowedOrigins()
 
 func setDefaultHeaders(w *http.ResponseWriter, req *http.Request) {
 	requestOrigin := req.Header.Get("Origin")
-	if AllowedHeaderOrigins[requestOrigin] {
+	if AllowAllOrigins || AllowedHeaderOrigins[requestOrigin] {
 		(*w).Header().Set("Access-Control-Allow-Origin", requestOrigin)
 	}
 	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
