@@ -1,0 +1,21 @@
+version: '3.0'
+
+services:
+  # Elasticsearch batcher container
+  batcher:
+    restart: always
+    build:
+      context: ./
+    command: elasticsearch-batcher
+    ports:
+      - 8889:8889
+    depends_on:
+      - elasticsearch
+  # Local elasticsearch instance for testing
+  elasticsearch:
+    restart: always
+    image: elasticsearch:7.6.1
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
