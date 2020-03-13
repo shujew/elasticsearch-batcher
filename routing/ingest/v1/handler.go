@@ -4,7 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-	"shujew/elasticsearch-batcher/data/elasticsearch"
+	"shujew/elasticsearch-batcher/elasticsearch"
 )
 
 func Handler(w http.ResponseWriter, req *http.Request) {
