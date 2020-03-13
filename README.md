@@ -7,7 +7,7 @@ guarantees ordering at the client-level.
 ## Sending Data
 
 Endpoint: `/ingest/v1` \
-Data: Use the same format as [Elasticsearch bulk api](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)
+Data: Use the same format as the [elasticsearch bulk api](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)
 
 ## Configuration
 
