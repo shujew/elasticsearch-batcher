@@ -2,8 +2,10 @@ package elasticsearch
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 	"shujew/elasticsearch-batcher/batch"
 	"shujew/elasticsearch-batcher/config"
@@ -108,8 +110,21 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	}
 	req.Header.Set("Content-Type", "application/x-ndjson")
 
-	// TODO: add support for logging failures or atleast retries
-	_, _ = c.httpClient.Do(req)
+	if resp, err := c.httpClient.Do(req); err == nil {
+		defer resp.Body.Close()
+		if body, err := ioutil.ReadAll(resp.Body); err == nil {
+			var respJson map[string]interface{}
+			if err := json.Unmarshal(body, &respJson); err == nil {
+				if errPresent, ok := respJson["errors"].(bool); ok && errPresent {
+					log.Error("es host reported errors with payload")
+				}
+			}
+		} else {
+			log.Error(err)
+		}
+	} else {
+		log.Error(err)
+	}
 }
 
 func (c *BulkClient) generateBulkPayload(documents []interface{}) []byte {
