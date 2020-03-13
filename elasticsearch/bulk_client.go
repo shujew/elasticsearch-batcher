@@ -123,26 +123,27 @@ func (c *BulkClient) QueueForBulkIndexing(document interface{}) {
 func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	log.Trace("indexing documents from bulk es client to es host")
 
+	// sending request to ES
 	endpoint := fmt.Sprintf("%s/_bulk", c.esHost)
-	body := c.generateBulkPayload(documents)
-
-	req, _ := http.NewRequest(http.MethodPost, endpoint, bytes.NewReader(body))
+	reqBody := c.generateBulkPayload(documents)
+	req, _ := http.NewRequest(http.MethodPost, endpoint, bytes.NewReader(reqBody))
 	if c.esUsername != "" && c.esPassword != "" {
 		req.SetBasicAuth(c.esUsername, c.esPassword)
 	}
 	req.Header.Set("Content-Type", "application/x-ndjson")
-
-	if resp, err := c.httpClient.Do(req); err == nil {
-		defer resp.Body.Close()
-		if body, err := ioutil.ReadAll(resp.Body); err == nil {
-			var respJSON map[string]interface{}
-			if err := json.Unmarshal(body, &respJSON); err == nil {
-				if errPresent, ok := respJSON["errors"].(bool); ok && errPresent {
-					log.Error("es host reported errors with payload")
-				}
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	// check ES response for errors
+	defer resp.Body.Close()
+	if respBody, err := ioutil.ReadAll(resp.Body); err == nil {
+		var respBodyJSON map[string]interface{}
+		if err := json.Unmarshal(respBody, &respBodyJSON); err == nil {
+			if errPresent, ok := respBodyJSON["errors"].(bool); ok && errPresent {
+				log.Error("es host reported errors with payload")
 			}
-		} else {
-			log.Error(err)
 		}
 	} else {
 		log.Error(err)
