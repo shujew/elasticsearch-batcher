@@ -1,8 +1,11 @@
 package v1
 
-import "net/http"
+import (
+	"net/http"
+	"shujew/elasticsearch-batcher/config"
+)
 
-var AllowedHeaderOrigins = map[string]bool{}
+var AllowedHeaderOrigins = config.GetAllowedHosts()
 
 func setDefaultHeaders(w *http.ResponseWriter, req *http.Request) {
 	requestOrigin := req.Header.Get("Origin")

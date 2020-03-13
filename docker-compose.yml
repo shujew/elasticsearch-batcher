@@ -1,7 +1,7 @@
 version: '3.0'
 
 services:
-  # Elasticsearch batcher container
+  # Elasticsearch batcher
   batcher:
     restart: always
     build:
@@ -11,7 +11,7 @@ services:
       - 8889:8889
     depends_on:
       - elasticsearch
-  # elasticsearch instance for testing batcher
+  # elasticsearch instance to test batcher service
   elasticsearch:
     restart: always
     image: elasticsearch:7.6.1
@@ -19,7 +19,7 @@ services:
       - discovery.type=single-node
     ports:
       - 9200:9200
-  # kibana so we can view elasticsearch better
+  # kibana to visualize data inside elasticsearch
   kibana:
     restart: always
     image: kibana:7.6.1

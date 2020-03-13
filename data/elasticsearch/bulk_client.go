@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"shujew/elasticsearch-batcher/batch"
+	"shujew/elasticsearch-batcher/config"
 	"time"
 )
 
@@ -20,9 +21,9 @@ type BulkClient struct {
 }
 
 var clientSingleton = newBulkClient(
-	"localhost",
-	30 * time.Second,
-	10 * time.Second,
+	config.GetESHost(),
+	config.GetESTimeoutSeconds(),
+	config.GetFlushIntervalSeconds(),
 )
 
 func newBulkClient(
@@ -45,6 +46,10 @@ func newBulkClient(
 		memoryBatcher: batch.NewMemoryBatch(flushInterval),
 	}
 
+	client.SetBasicAuth(
+		config.GetESUsername(),
+		config.GetESPassword(),
+	)
 	client.Start()
 
 	return &client
