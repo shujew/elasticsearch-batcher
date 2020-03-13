@@ -2,7 +2,7 @@ package elasticsearch
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/gob"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -86,7 +86,7 @@ func (c *BulkClient) Stop() {
 	c.memoryBatcher.Stop()
 }
 
-func (c *BulkClient) IndexDocument(document map[string]interface{}) {
+func (c *BulkClient) QueueForBulkIndexing(document []interface{}) {
 	log.Debug("sending item to be indexed to bulk es client")
 	// actually schedules document for bulk indexing
 	c.memoryBatcher.AddItem(document)
@@ -109,15 +109,23 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 }
 
 func (c *BulkClient) generateBulkPayload(documents []interface{}) []byte {
-	payload := ""
-
+	var payload []byte
+	
 	for _, document := range documents {
-		if documentPayload, err := json.Marshal(document); err == nil {
-			// leaving adding newline to the client
-			payload = payload + string(documentPayload)
+		if documentPayload, err := interfaceToBytesArray(document); err == nil {
+			payload = append(payload, documentPayload...)
 		}
 	}
 
-	return []byte(payload)
+	return payload
 }
 
+func interfaceToBytesArray(key interface{}) ([]byte, error) {
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	if err := enc.Encode(key); err == nil {
+		return buf.Bytes(), nil
+	} else {
+		return nil, err
+	}
+}
