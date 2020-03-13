@@ -2,7 +2,6 @@ package elasticsearch
 
 import (
 	"bytes"
-	"encoding/gob"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -22,8 +21,8 @@ type BulkClient struct {
 
 var clientSingleton = newBulkClient(
 	config.GetESHost(),
-	config.GetESTimeoutSeconds(),
-	config.GetFlushIntervalSeconds(),
+	config.GetESTimeout(),
+	config.GetFlushInterval(),
 )
 
 func newBulkClient(
@@ -38,7 +37,7 @@ func newBulkClient(
 		"flushInterval": flushInterval,
 	}).Trace("creating new bulk es client")
 
-	client := BulkClient{
+	client := BulkClient {
 		esHost: esHost,
 		httpClient: &http.Client{
 			Timeout: httpTimeout,
@@ -110,27 +109,17 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	req.Header.Set("Content-Type", "application/x-ndjson")
 
 	// TODO: add support for logging failures or atleast retries
-	go c.httpClient.Do(req)
+	_, _ = c.httpClient.Do(req)
 }
 
 func (c *BulkClient) generateBulkPayload(documents []interface{}) []byte {
 	var payload []byte
 	
 	for _, document := range documents {
-		if documentPayload, err := interfaceToBytesArray(document); err == nil {
-			payload = append(payload, documentPayload...)
+		if b, ok := document.([]byte); ok == true {
+			payload = append(payload, b...)
 		}
 	}
 
 	return payload
-}
-
-func interfaceToBytesArray(key interface{}) ([]byte, error) {
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	if err := enc.Encode(key); err == nil {
-		return buf.Bytes(), nil
-	} else {
-		return nil, err
-	}
 }
