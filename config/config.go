@@ -1,16 +1,18 @@
 package config
 
 import (
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
 // env var definition
-//var logLevelEnvVar = "ESB_LOG_LEVEL"
+var debugEnvVar = "ESB_DEBUG"
 var httpPortEnvVar = "ESB_HTTP_PORT"
-//var allowedHostsEnvVar = "ESB_ALLOWED_HOSTS"
+var allowedHostsEnvVar = "ESB_ALLOWED_HOSTS"
 var esHostEnvVar = "ESB_ES_HOST"
 var esUsernameEnvVar = "ESB_ES_USERNAME"
 var esPasswordEnvVar = "ESB_ES_PASSWORD"
@@ -18,9 +20,12 @@ var esTimeoutEnvVar = "ESB_ES_TIMEOUT_SECONDS"
 var esFlushIntervalEnvVar = "ESB_FLUSH_INTERVAL_SECONDS"
 
 func GetLogLevel() log.Level {
-	//TODO: implement
-	//value := getEnvValue(logLevelEnvVar, "INFO")
-	return log.TraceLevel
+	value := getEnvValue(debugEnvVar, "")
+	if value == "ON" {
+		return log.TraceLevel
+	} else {
+		return log.InfoLevel
+	}
 }
 
 func GetHttpPort() string {
@@ -28,9 +33,15 @@ func GetHttpPort() string {
 }
 
 func GetAllowedHosts() map[string]bool {
-	//TODO: implement
-	//value := getEnvValue(allowedHostsEnvVar, "")
-	return map[string]bool{}
+	allowedHosts := map[string]bool{}
+	value := getEnvValue(allowedHostsEnvVar, "")
+	for _, allowedHost := range strings.Split(value, ",") {
+		if len(allowedHost) > 0 {
+			fmt.Println(allowedHost)
+			allowedHosts[allowedHost] = true
+		}
+	}
+	return allowedHosts
 }
 
 func GetESHost() string {
