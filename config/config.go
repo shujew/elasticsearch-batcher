@@ -34,7 +34,7 @@ func GetAllowedHosts() map[string]bool {
 }
 
 func GetESHost() string {
-	return getEnvValue(esHostEnvVar, "localhost")
+	return getEnvValue(esHostEnvVar, "http://localhost:9200")
 }
 
 func GetESUsername() string {
@@ -45,20 +45,20 @@ func GetESPassword() string {
 	return getEnvValue(esPasswordEnvVar, "")
 }
 
-func GetESTimeoutSeconds() time.Duration {
-	value := getEnvValue(esTimeoutEnvVar, "10")
+func GetESTimeout() time.Duration {
+	value := getEnvValue(esTimeoutEnvVar, "2")
+	if i, err := strconv.Atoi(value); err == nil {
+		return time.Duration(i) * time.Second
+	}
+	return 2 * time.Second
+}
+
+func GetFlushInterval() time.Duration {
+	value := getEnvValue(esFlushIntervalEnvVar, "10")
 	if i, err := strconv.Atoi(value); err == nil {
 		return time.Duration(i) * time.Second
 	}
 	return 10 * time.Second
-}
-
-func GetFlushIntervalSeconds() time.Duration {
-	value := getEnvValue(esFlushIntervalEnvVar, "60")
-	if i, err := strconv.Atoi(value); err == nil {
-		return time.Duration(i) * time.Second
-	}
-	return 60 * time.Second
 }
 
 func getEnvValue(key, defaultValue string) string {
