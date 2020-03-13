@@ -19,7 +19,7 @@ type MemoryBatcher struct {
 func NewMemoryBatch(interval time.Duration) *MemoryBatcher {
 	log.WithFields(log.Fields{
 		"interval": interval,
-	}).Debug("creating new memory batcher")
+	}).Trace("creating new memory batcher")
 
 	return &MemoryBatcher{
 		items:    []interface{}{},
@@ -28,7 +28,7 @@ func NewMemoryBatch(interval time.Duration) *MemoryBatcher {
 }
 
 func (b *MemoryBatcher) Start() {
-	log.Debug("starting memory batcher")
+	log.Trace("starting memory batcher")
 
 	b.JobsChan = make(chan []interface{})
 	b.quitChan = make(chan struct{})
@@ -48,7 +48,7 @@ func (b *MemoryBatcher) Start() {
 }
 
 func (b *MemoryBatcher) Stop() {
-	log.Debug("stopping memory batcher")
+	log.Trace("stopping memory batcher")
 
 	b.flushItems(func() {
 		defer close(b.JobsChan)
@@ -59,7 +59,7 @@ func (b *MemoryBatcher) Stop() {
 }
 
 func (b *MemoryBatcher) AddItem(item interface{}) {
-	log.Debug("adding item to memory batcher")
+	log.Trace("adding item to memory batcher")
 
 	b.mutex.Lock()
 	go func(item interface{}) {
@@ -83,7 +83,7 @@ func (b *MemoryBatcher) flushItems(completion func()) {
 			b.items = []interface{}{}
 
 			if completion != nil {
-				log.Debug("calling completion after flushing items")
+				log.Trace("calling completion after flushing items")
 				completion()
 			}
 		}

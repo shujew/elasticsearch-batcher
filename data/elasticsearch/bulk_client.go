@@ -35,7 +35,7 @@ func newBulkClient(
 		"esHost": esHost,
 		"timeout": httpTimeout,
 		"flushInterval": flushInterval,
-	}).Debug("creating new bulk es client")
+	}).Trace("creating new bulk es client")
 
 	client := BulkClient{
 		esHost: esHost,
@@ -58,14 +58,14 @@ func (c *BulkClient) SetBasicAuth(esUsername, esPassword string) {
 	log.WithFields(log.Fields{
 		"username": esUsername,
 		"password": esPassword,
-	}).Debug("setting basic auth on es client")
+	}).Trace("setting basic auth on es client")
 
 	c.esUsername = esUsername
 	c.esPassword = esPassword
 }
 
 func (c *BulkClient) Start() {
-	log.Debug("starting bulk es client")
+	log.Trace("starting bulk es client")
 
 	c.memoryBatcher.Start()
 
@@ -81,19 +81,19 @@ func (c *BulkClient) Start() {
 }
 
 func (c *BulkClient) Stop() {
-	log.Debug("stopping bulk es client")
+	log.Trace("stopping bulk es client")
 
 	c.memoryBatcher.Stop()
 }
 
-func (c *BulkClient) QueueForBulkIndexing(document []interface{}) {
-	log.Debug("sending item to be indexed to bulk es client")
+func (c *BulkClient) QueueForBulkIndexing(document interface{}) {
+	log.Trace("sending item to be indexed to bulk es client")
 	// actually schedules document for bulk indexing
 	c.memoryBatcher.AddItem(document)
 }
 
 func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
-	log.Debug("indexing documents from bulk es client to es host")
+	log.Trace("indexing documents from bulk es client to es host")
 
 	endpoint := fmt.Sprintf("%s/_bulk", c.esHost)
 	body := c.generateBulkPayload(documents)
