@@ -5,7 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"shujew/elasticsearch-batcher/config"
-	ingestV1 "shujew/elasticsearch-batcher/routing/ingest/v1"
+	"shujew/elasticsearch-batcher/routing/ingestv1"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		_, _ = w.Write([]byte("Elasticsearch Batcher"))
 	})
-	http.HandleFunc("/ingest/v1", ingestV1.Handler)
+	http.HandleFunc("/ingest/v1", ingestv1.Handler)
 
 	// setting up http server
 	httpPort := config.GetHttpPort()
