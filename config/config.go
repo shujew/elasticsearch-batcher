@@ -19,7 +19,7 @@ var esTimeoutEnvVar = "ESB_ES_TIMEOUT_SECONDS"
 var esFlushIntervalEnvVar = "ESB_FLUSH_INTERVAL_SECONDS"
 
 func GetLogLevel() log.Level {
-	value := getEnvValue(debugEnvVar, "")
+	value := getEnvValue(debugEnvVar, "OFF")
 	if value == "ON" {
 		return log.TraceLevel
 	} else {
@@ -28,7 +28,7 @@ func GetLogLevel() log.Level {
 }
 
 func GetHttpPort() string {
-	return getEnvValue(httpPortEnvVar, "8887")
+	return getEnvValue(httpPortEnvVar, "8889")
 }
 
 func GetAllowedHosts() map[string]bool {
@@ -55,19 +55,19 @@ func GetESPassword() string {
 }
 
 func GetESTimeout() time.Duration {
-	value := getEnvValue(esTimeoutEnvVar, "2")
+	value := getEnvValue(esTimeoutEnvVar, "60")
 	if i, err := strconv.Atoi(value); err == nil {
 		return time.Duration(i) * time.Second
 	}
-	return 2 * time.Second
+	return 60 * time.Second
 }
 
 func GetFlushInterval() time.Duration {
-	value := getEnvValue(esFlushIntervalEnvVar, "10")
+	value := getEnvValue(esFlushIntervalEnvVar, "60")
 	if i, err := strconv.Atoi(value); err == nil {
 		return time.Duration(i) * time.Second
 	}
-	return 10 * time.Second
+	return 60 * time.Second
 }
 
 func getEnvValue(key, defaultValue string) string {
