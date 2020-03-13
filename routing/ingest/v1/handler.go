@@ -21,7 +21,7 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 }
 
 func POSTHandler(w http.ResponseWriter, req *http.Request) {
-	if body, err := ioutil.ReadAll(req.Body); err != nil {
+	if body, err := ioutil.ReadAll(req.Body); err == nil {
 		esClient := elasticsearch.GetBulkClient()
 		esClient.QueueForBulkIndexing(body)
 		w.WriteHeader(http.StatusCreated)
