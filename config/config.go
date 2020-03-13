@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"strconv"
@@ -29,7 +28,7 @@ func GetLogLevel() log.Level {
 }
 
 func GetHttpPort() string {
-	return getEnvValue(httpPortEnvVar, "8889")
+	return getEnvValue(httpPortEnvVar, "8887")
 }
 
 func GetAllowedHosts() map[string]bool {
@@ -37,7 +36,6 @@ func GetAllowedHosts() map[string]bool {
 	value := getEnvValue(allowedHostsEnvVar, "")
 	for _, allowedHost := range strings.Split(value, ",") {
 		if len(allowedHost) > 0 {
-			fmt.Println(allowedHost)
 			allowedHosts[allowedHost] = true
 		}
 	}
