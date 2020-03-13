@@ -1,3 +1,5 @@
+// Package elasticsearch provides structs to upload
+// documents to an elasticsearch cluster
 package elasticsearch
 
 import (
@@ -12,6 +14,9 @@ import (
 	"time"
 )
 
+// BulkClient encapsulates queuing documents
+// and emitting them to the _bulk endpoint
+// of an elasticsearch cluster
 type BulkClient struct {
 	esHost        string
 	esUsername    string
@@ -21,12 +26,16 @@ type BulkClient struct {
 	memoryBatcher *batch.MemoryBatcher
 }
 
+// clientSingleton is a single instance of BulkClient
+// which should be used throughout the whole app
 var clientSingleton = newBulkClient(
 	config.GetESHost(),
 	config.GetESTimeout(),
 	config.GetFlushInterval(),
 )
 
+// newBulkClient creates and configures a new instance
+// of BulkClient
 func newBulkClient(
 	esHost        string,
 	httpTimeout   time.Duration,
@@ -56,10 +65,15 @@ func newBulkClient(
 	return &client
 }
 
+// GetBulkClient returns the singleton instance
+// of BulkClient
 func GetBulkClient() *BulkClient {
 	return clientSingleton
 }
 
+// SetBasicAuth sets the username and password used
+// when sending data to the elasticsearch cluster
+// (BASICAUTH)
 func (c *BulkClient) SetBasicAuth(esUsername, esPassword string) {
 	log.WithFields(log.Fields{
 		"username": esUsername,
@@ -70,6 +84,9 @@ func (c *BulkClient) SetBasicAuth(esUsername, esPassword string) {
 	c.esPassword = esPassword
 }
 
+// Start starts the memory batch and starts a
+// goroutine to pick up documents from the
+// queue and bulk indexing them
 func (c *BulkClient) Start() {
 	log.Trace("starting bulk es client")
 
@@ -86,18 +103,23 @@ func (c *BulkClient) Start() {
 	}()
 }
 
+// Stop terminates the queue / cleans up used resources
 func (c *BulkClient) Stop() {
 	log.Trace("stopping bulk es client")
 
 	c.memoryBatcher.Stop()
 }
 
+// QueueForBulkIndexing adds a document to the queue for
+// bulk indexing
 func (c *BulkClient) QueueForBulkIndexing(document interface{}) {
 	log.Trace("sending item to be indexed to bulk es client")
 	// actually schedules document for bulk indexing
 	c.memoryBatcher.AddItem(document)
 }
 
+// bulkIndexDocuments get a bulk payload and pushes it to the bulk
+// endpoint of the elasticsearch cluster
 func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	log.Trace("indexing documents from bulk es client to es host")
 
@@ -127,6 +149,8 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	}
 }
 
+// generateBulkPayload builds a bulk payload from the emitted documents
+// from the queue
 func (c *BulkClient) generateBulkPayload(documents []interface{}) []byte {
 	var payload []byte
 	
