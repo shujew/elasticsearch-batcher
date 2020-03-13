@@ -45,6 +45,8 @@ func newBulkClient(
 		memoryBatcher: batch.NewMemoryBatch(flushInterval),
 	}
 
+	client.Start()
+
 	return &client
 }
 
