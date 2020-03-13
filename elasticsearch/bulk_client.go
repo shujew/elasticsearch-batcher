@@ -135,9 +135,9 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	if resp, err := c.httpClient.Do(req); err == nil {
 		defer resp.Body.Close()
 		if body, err := ioutil.ReadAll(resp.Body); err == nil {
-			var respJson map[string]interface{}
-			if err := json.Unmarshal(body, &respJson); err == nil {
-				if errPresent, ok := respJson["errors"].(bool); ok && errPresent {
+			var respJSON map[string]interface{}
+			if err := json.Unmarshal(body, &respJSON); err == nil {
+				if errPresent, ok := respJSON["errors"].(bool); ok && errPresent {
 					log.Error("es host reported errors with payload")
 				}
 			}

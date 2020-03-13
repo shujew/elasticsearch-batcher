@@ -1,4 +1,4 @@
-// Package configs provides a simple interface for the app
+// Package config provides a simple interface for the app
 // to access values defined by environment variables
 package config
 
@@ -30,14 +30,13 @@ func GetLogLevel() log.Level {
 	value := getEnvValue(debugEnvVar, "OFF")
 	if value == "ON" {
 		return log.TraceLevel
-	} else {
-		return log.InfoLevel
 	}
+	return log.InfoLevel
 }
 
-// GetHttpPort returns the http port on which the app
+// GetHTTPPort returns the http port on which the app
 // should run on
-func GetHttpPort() string {
+func GetHTTPPort() string {
 	return getEnvValue(httpPortEnvVar, "8889")
 }
 
@@ -104,7 +103,6 @@ func getEnvValue(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if len(value) > 0 {
 		return value
-	} else {
-		return defaultValue
 	}
+	return defaultValue
 }

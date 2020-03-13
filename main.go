@@ -24,7 +24,7 @@ func main() {
 	http.HandleFunc("/ingest/v1", ingestv1.Handler)
 
 	// setting up http server
-	httpPort := config.GetHttpPort()
+	httpPort := config.GetHTTPPort()
 	httpAddr := fmt.Sprintf(":%s", httpPort)
 	log.Info("server is listening on port ", httpPort)
 	if err := http.ListenAndServe(httpAddr, nil); err != nil {
