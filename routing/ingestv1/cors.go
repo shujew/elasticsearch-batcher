@@ -8,6 +8,7 @@ import (
 // AllowAllOrigins is a bool which defines whether the
 // app should allow all origins for CORS
 var AllowAllOrigins = config.GetAllowAllOrigins()
+
 // AllowedHeaderOrigins is a map which defines which
 // origins the app should allow for CORS. It is
 // ignored if AllowAllOrigins=true

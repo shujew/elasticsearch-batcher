@@ -18,9 +18,9 @@ import (
 // and emitting them to the _bulk endpoint
 // of an elasticsearch cluster
 type BulkClient struct {
-	esHost        string
-	esUsername    string
-	esPassword    string
+	esHost     string
+	esUsername string
+	esPassword string
 
 	httpClient    *http.Client
 	memoryBatcher *batch.MemoryBatcher
@@ -37,18 +37,18 @@ var clientSingleton = newBulkClient(
 // newBulkClient creates and configures a new instance
 // of BulkClient
 func newBulkClient(
-	esHost        string,
-	httpTimeout   time.Duration,
+	esHost string,
+	httpTimeout time.Duration,
 	flushInterval time.Duration,
-	) *BulkClient {
+) *BulkClient {
 
 	log.WithFields(log.Fields{
-		"esHost": esHost,
-		"timeout": httpTimeout,
+		"esHost":        esHost,
+		"timeout":       httpTimeout,
 		"flushInterval": flushInterval,
 	}).Trace("creating new bulk es client")
 
-	client := BulkClient {
+	client := BulkClient{
 		esHost: esHost,
 		httpClient: &http.Client{
 			Timeout: httpTimeout,
@@ -154,7 +154,7 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 // from the queue
 func (c *BulkClient) generateBulkPayload(documents []interface{}) []byte {
 	var payload []byte
-	
+
 	for _, document := range documents {
 		if b, ok := document.([]byte); ok == true {
 			payload = append(payload, b...)

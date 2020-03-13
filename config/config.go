@@ -13,15 +13,15 @@ import (
 // Constants below define the environment variable key
 // used by the specified function defined in var name
 const (
-	debugEnvVar           string  = "ESB_DEBUG"
-	httpPortEnvVar        string  = "ESB_HTTP_PORT"
-	allowAllOriginsEnvVar string  = "ESB_ALLOW_ALL_ORIGINS"
-	allowedOriginsEnvVar  string  = "ESB_ALLOWED_ORIGINS"
-	esHostEnvVar          string  = "ESB_ES_HOST"
-	esUsernameEnvVar      string  = "ESB_ES_USERNAME"
-	esPasswordEnvVar      string  = "ESB_ES_PASSWORD"
-	esTimeoutEnvVar       string  = "ESB_ES_TIMEOUT_SECONDS"
-	esFlushIntervalEnvVar string  = "ESB_FLUSH_INTERVAL_SECONDS"
+	debugEnvVar           string = "ESB_DEBUG"
+	httpPortEnvVar        string = "ESB_HTTP_PORT"
+	allowAllOriginsEnvVar string = "ESB_ALLOW_ALL_ORIGINS"
+	allowedOriginsEnvVar  string = "ESB_ALLOWED_ORIGINS"
+	esHostEnvVar          string = "ESB_ES_HOST"
+	esUsernameEnvVar      string = "ESB_ES_USERNAME"
+	esPasswordEnvVar      string = "ESB_ES_PASSWORD"
+	esTimeoutEnvVar       string = "ESB_ES_TIMEOUT_SECONDS"
+	esFlushIntervalEnvVar string = "ESB_FLUSH_INTERVAL_SECONDS"
 )
 
 // GetLogLevel returns the log level to be used throughout
