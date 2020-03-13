@@ -1,3 +1,4 @@
+// Package batch provides structs to perform batch processing
 package batch
 
 import (
@@ -6,6 +7,9 @@ import (
 	"time"
 )
 
+// MemoryBatcher encapsulates channels and mutexes to provide a
+// clean and easy-to-use FIFO queue to batch data in memory and
+// emit them at a specified interval
 type MemoryBatcher struct {
 	items    []interface{}
 	interval time.Duration
@@ -16,7 +20,10 @@ type MemoryBatcher struct {
 	quitChan chan struct{}
 }
 
-func NewMemoryBatch(interval time.Duration) *MemoryBatcher {
+// NewMemoryBatcher creates new instance of instance of
+// MemoryBatcher configured to emit events a specific
+// interval, and returns a pointer to it
+func NewMemoryBatcher(interval time.Duration) *MemoryBatcher {
 	log.WithFields(log.Fields{
 		"interval": interval,
 	}).Trace("creating new memory batcher")
@@ -27,6 +34,9 @@ func NewMemoryBatch(interval time.Duration) *MemoryBatcher {
 	}
 }
 
+// Start sets up the channels required to queue data
+// and terminate the instance. It also sets up data
+// flushing after the specified interval
 func (b *MemoryBatcher) Start() {
 	log.Trace("starting memory batcher")
 
@@ -47,6 +57,8 @@ func (b *MemoryBatcher) Start() {
 	}()
 }
 
+// Stop closes all all open channels and cleans
+// up used resources
 func (b *MemoryBatcher) Stop() {
 	log.Trace("stopping memory batcher")
 
@@ -58,6 +70,8 @@ func (b *MemoryBatcher) Stop() {
 	})
 }
 
+// AddItem is an atomic function which adds a
+// type-agnostic item to the queue
 func (b *MemoryBatcher) AddItem(item interface{}) {
 	log.Trace("adding item to memory batcher")
 
@@ -68,6 +82,9 @@ func (b *MemoryBatcher) AddItem(item interface{}) {
 	}(item)
 }
 
+// flushItems is an atomic function which handles
+// flushing the queue to jobs channel (and runs
+// a callback afterwards if specified)
 func (b *MemoryBatcher) flushItems(completion func()) {
 	b.mutex.Lock()
 	go func(items []interface{}) {
