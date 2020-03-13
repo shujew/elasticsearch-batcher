@@ -44,7 +44,7 @@ func newBulkClient(
 		httpClient: &http.Client{
 			Timeout: httpTimeout,
 		},
-		memoryBatcher: batch.NewMemoryBatch(flushInterval),
+		memoryBatcher: batch.NewMemoryBatcher(flushInterval),
 	}
 
 	client.SetBasicAuth(
