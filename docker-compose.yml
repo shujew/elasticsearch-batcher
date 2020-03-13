@@ -7,6 +7,12 @@ services:
     build:
       context: ./
     command: elasticsearch-batcher
+    environment:
+      - ESB_DEBUG=ON
+      - ESB_ALLOWED_HOSTS=shujew.com,http://test.com
+      - ESB_ES_HOST=http://elasticsearch:9200
+      - ESB_ES_TIMEOUT_SECONDS=10
+      - ESB_FLUSH_INTERVAL_SECONDS=1
     ports:
       - 8889:8889
     depends_on:
