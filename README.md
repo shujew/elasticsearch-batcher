@@ -49,8 +49,10 @@ Elasticsearch-Batcher is easily configurable via global variables:
 ### Run Elastic-Batcher
 ```shell script
 cd /path/to/repo
-docker-compose up --build
+docker-compose up
 ```
+
+Note: If you need to rebuild the images for any reason, use `docker-compose build`
 
 Elasticsearch-Batcher will accessible at http://localhost:8889/ \
 Elasticsearch will accessible at http://localhost:9200/ \
