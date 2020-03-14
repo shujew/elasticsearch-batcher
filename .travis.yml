@@ -14,9 +14,6 @@ before_install:
 env:
   GO111MODULE=off
 
-install:
-  - true  # Do nothing. This is needed to prevent default install action "travis_install_go_dependencies"
-
 script:
   - golangci-lint run      # runs code checkers & linters in parallel
   - go test -v -race ./... # runs tests and detect race conditions
