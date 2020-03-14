@@ -9,8 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-	"shujew/elasticsearch-batcher/batch"
-	"shujew/elasticsearch-batcher/config"
+	"github.com/shujew/elasticsearch-batcher/batch"
+	"github.com/shujew/elasticsearch-batcher/config"
 	"time"
 )
 

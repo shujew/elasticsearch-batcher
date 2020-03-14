@@ -3,13 +3,13 @@
 FROM golang:1.14
 
 # Copy the local package files to the container's workspace.
-ADD . /go/src/shujew/elasticsearch-batcher/
+ADD . /go/src/github.com/shujew/elasticsearch-batcher/
 
 RUN \
     # install dep (dependency management)
     curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh \
     # cd into elasticsearch-batcher directory
-    && cd /go/src/shujew/elasticsearch-batcher/ \
+    && cd /go/src/github.com/shujew/elasticsearch-batcher/ \
     # install dependencies
     && dep ensure
 

@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-	"shujew/elasticsearch-batcher/elasticsearch"
+	"github.com/shujew/elasticsearch-batcher/elasticsearch"
 )
 
 // Handler sets the default headers for CORS on the

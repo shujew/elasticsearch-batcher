@@ -4,8 +4,8 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
-	"shujew/elasticsearch-batcher/config"
-	"shujew/elasticsearch-batcher/routing/ingestv1"
+	"github.com/shujew/elasticsearch-batcher/config"
+	"github.com/shujew/elasticsearch-batcher/routing/ingestv1"
 )
 
 func main() {
