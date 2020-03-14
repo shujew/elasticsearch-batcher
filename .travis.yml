@@ -1,0 +1,22 @@
+language: go
+
+go:
+  - 1.14.x
+
+before_install:
+  # install godep
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  # install app dependencies
+  - dep ensure
+  # install golangci-lint
+  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.8
+
+env:
+  GO111MODULE=off
+
+install:
+  - true  # Do nothing. This is needed to prevent default install action "travis_install_go_dependencies"
+
+script:
+  - golangci-lint run      # runs code checkers & linters in parallel
+  - go test -v -race ./... # runs tests and detect race conditions
