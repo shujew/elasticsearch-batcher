@@ -1,8 +1,8 @@
 version: '3.0'
 
 services:
-  # Elasticsearch batcher
-  batcher:
+  # Elasticsearch batcher container
+  elasticsearch-batcher:
     restart: always
     build:
       context: ./
