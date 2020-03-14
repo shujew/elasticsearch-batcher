@@ -1,8 +1,8 @@
 package ingestv1
 
 import (
-	"net/http"
 	"github.com/shujew/elasticsearch-batcher/config"
+	"net/http"
 )
 
 // AllowAllOrigins is a bool which defines whether the

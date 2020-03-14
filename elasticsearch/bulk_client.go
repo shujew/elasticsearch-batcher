@@ -6,11 +6,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/shujew/elasticsearch-batcher/batch"
+	"github.com/shujew/elasticsearch-batcher/config"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-	"github.com/shujew/elasticsearch-batcher/batch"
-	"github.com/shujew/elasticsearch-batcher/config"
 	"time"
 )
 

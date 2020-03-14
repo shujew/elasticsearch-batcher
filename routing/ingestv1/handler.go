@@ -4,10 +4,10 @@
 package ingestv1
 
 import (
+	"github.com/shujew/elasticsearch-batcher/elasticsearch"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
-	"github.com/shujew/elasticsearch-batcher/elasticsearch"
 )
 
 // Handler sets the default headers for CORS on the

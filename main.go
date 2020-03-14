@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
-	"net/http"
 	"github.com/shujew/elasticsearch-batcher/config"
 	"github.com/shujew/elasticsearch-batcher/routing/ingestv1"
+	log "github.com/sirupsen/logrus"
+	"net/http"
 )
 
 func main() {
