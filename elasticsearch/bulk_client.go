@@ -156,7 +156,7 @@ func (c *BulkClient) generateBulkPayload(documents []interface{}) []byte {
 	var payload []byte
 
 	for _, document := range documents {
-		if b, ok := document.([]byte); ok == true {
+		if b, ok := document.([]byte); ok {
 			payload = append(payload, b...)
 		}
 	}
