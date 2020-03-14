@@ -6,7 +6,6 @@ services:
     restart: always
     build:
       context: ./
-    command: elasticsearch-batcher
     environment:
       - ESB_ES_HOST=http://elasticsearch:9200
       - ESB_FLUSH_INTERVAL_SECONDS=10

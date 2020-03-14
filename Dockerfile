@@ -14,4 +14,7 @@ RUN \
     && dep ensure
 
 # Build elastic-batcher
-RUN go install shujew/elasticsearch-batcher
+RUN go install github.com/shujew/elasticsearch-batcher
+
+EXPOSE 8889
+ENTRYPOINT ["elasticsearch-batcher"]
