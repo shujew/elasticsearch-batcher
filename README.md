@@ -1,6 +1,6 @@
 # Elasticsearch-Batcher
 
-[![Build Status](https://travis-ci.org/shujew/elasticsearch-batcher.svg?branch=master)](https://travis-ci.org/prebid/prebid-server)
+[![Build Status](https://travis-ci.org/shujew/elasticsearch-batcher.svg?branch=master)](https://travis-ci.org/shujew/elasticsearch-batcher)
 [![Go Report Card](https://goreportcard.com/badge/github.com/shujew/elasticsearch-batcher)](https://goreportcard.com/report/github.com/shujew/elasticsearch-batcher)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
