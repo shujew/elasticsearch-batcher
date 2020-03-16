@@ -145,6 +145,8 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 		if err := json.Unmarshal(respBody, &respBodyJSON); err == nil {
 			if errPresent, ok := respBodyJSON["errors"].(bool); ok && errPresent {
 				log.Error("es host reported errors with payload")
+				log.Error(string(reqBody))
+				log.Error(string(respBody))
 			}
 		}
 	} else {
