@@ -21,6 +21,7 @@ type BulkClient struct {
 	esHost     string
 	esUsername string
 	esPassword string
+	esTimeout  time.Duration
 
 	httpClient    *http.Client
 	memoryBatcher *batch.MemoryBatcher
@@ -50,6 +51,7 @@ func newBulkClient(
 
 	client := BulkClient{
 		esHost: esHost,
+		esTimeout: httpTimeout,
 		httpClient: &http.Client{
 			Timeout: httpTimeout,
 		},
@@ -124,7 +126,7 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 	log.Trace("indexing documents from bulk es client to es host")
 
 	// sending request to ES
-	endpoint := fmt.Sprintf("%s/_bulk", c.esHost)
+	endpoint := fmt.Sprintf("%s/_bulk?timeout=%ds", c.esHost, c.esTimeout/time.Second)
 	reqBody := c.generateBulkPayload(documents)
 	req, _ := http.NewRequest(http.MethodPost, endpoint, bytes.NewReader(reqBody))
 	if c.esUsername != "" && c.esPassword != "" {
