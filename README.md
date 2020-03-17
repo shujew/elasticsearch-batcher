@@ -8,9 +8,12 @@ Tested using golang v1.14.0
 
 ## Introduction
 Elasticsearch-Batcher is a a FIFO queue for indexing documents to Elasticsearch. It uses batch processing and guarantees
-ordering at the client-level. That means that when deployed across several instances, all of client's A request will be
+ordering at the client-level*. That means that when deployed across several instances, all of client's A request will be
 processed in order but there is no guarantee that it will be processed before client B's requests, which may have arrived
-after client A's request. 
+after client A's request.\
+\
+\* this assumes that you can route requests from a client to the same container (e.g. if you are using AWS, you can set
+up your target group and load balancer to do so)
 
 ## Why I built Elasticsearch-Batcher
 I was initially toying around with AWS Firehose Delivery Streams to Elasticsearch but I hit a wall when I wanted to specify
