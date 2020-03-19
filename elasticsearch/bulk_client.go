@@ -138,6 +138,15 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 		log.Error(err)
 		return
 	}
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		log.WithFields(log.Fields{
+			"endpoint": endpoint,
+			"status_code": resp.StatusCode,
+		}).Error("request failed")
+		return
+	}
+
 	// check ES response for errors
 	defer resp.Body.Close()
 	if respBody, err := ioutil.ReadAll(resp.Body); err == nil {
