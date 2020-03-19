@@ -139,16 +139,20 @@ func (c *BulkClient) bulkIndexDocuments(documents []interface{}) {
 		return
 	}
 
+	defer resp.Body.Close()
+
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		log.WithFields(log.Fields{
 			"endpoint": endpoint,
 			"status_code": resp.StatusCode,
 		}).Error("request failed")
+		if respBody, err := ioutil.ReadAll(resp.Body); err == nil {
+			log.Error(string(respBody))
+		}
 		return
 	}
 
 	// check ES response for errors
-	defer resp.Body.Close()
 	if respBody, err := ioutil.ReadAll(resp.Body); err == nil {
 		var respBodyJSON map[string]interface{}
 		if err := json.Unmarshal(respBody, &respBodyJSON); err == nil {
