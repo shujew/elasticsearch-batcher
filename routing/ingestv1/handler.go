@@ -36,7 +36,6 @@ func POSTHandler(w http.ResponseWriter, req *http.Request) {
 			//TODO: add a sync endpoint instead to synchronize timestamps
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(generateSyncResponse())
-			w.WriteHeader(http.StatusOK)
 		} else {
 			esClient := elasticsearch.GetBulkClient()
 			esClient.QueueForBulkIndexing(body)
