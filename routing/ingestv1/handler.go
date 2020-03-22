@@ -30,9 +30,13 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 // later indexing into an  elasticsearch cluster
 func POSTHandler(w http.ResponseWriter, req *http.Request) {
 	if body, err := ioutil.ReadAll(req.Body); err == nil {
-		esClient := elasticsearch.GetBulkClient()
-		esClient.QueueForBulkIndexing(body)
-		w.WriteHeader(http.StatusCreated)
+		if len(body) == 0 {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			esClient := elasticsearch.GetBulkClient()
+			esClient.QueueForBulkIndexing(body)
+			w.WriteHeader(http.StatusCreated)
+		}
 	} else {
 		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
