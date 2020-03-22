@@ -4,10 +4,12 @@
 package ingestv1
 
 import (
+	"encoding/json"
 	"github.com/shujew/elasticsearch-batcher/elasticsearch"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 // Handler sets the default headers for CORS on the
@@ -31,6 +33,9 @@ func Handler(w http.ResponseWriter, req *http.Request) {
 func POSTHandler(w http.ResponseWriter, req *http.Request) {
 	if body, err := ioutil.ReadAll(req.Body); err == nil {
 		if len(body) == 0 {
+			//TODO: add a sync endpoint instead to synchronize timestamps
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(generateSyncResponse())
 			w.WriteHeader(http.StatusOK)
 		} else {
 			esClient := elasticsearch.GetBulkClient()
@@ -41,4 +46,16 @@ func POSTHandler(w http.ResponseWriter, req *http.Request) {
 		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
+}
+
+func generateSyncResponse() []byte {
+	response := map[string]int64{
+		"t": time.Now().Unix(),
+	}
+
+	if responseString, err := json.Marshal(response); err == nil {
+		return responseString
+	}
+
+	return []byte{}
 }
