@@ -1,10 +1,8 @@
 package ingestv1
 
 import (
-	"fmt"
 	"github.com/shujew/elasticsearch-batcher/config"
 	"net/http"
-	"time"
 )
 
 // AllowAllOrigins is a bool which defines whether the
@@ -25,6 +23,5 @@ func setDefaultHeaders(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST OPTIONS")
-	(*w).Header().Set("Server-Name", "Elasticsearch-Batcher/1.0")
-	(*w).Header().Set("Server-Unix-Timestamp", fmt.Sprintf("%d", time.Now().Unix()))
+	(*w).Header().Set("Server", "Elasticsearch-Batcher/1.0")
 }
