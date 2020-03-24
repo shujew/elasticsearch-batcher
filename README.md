@@ -13,7 +13,7 @@ processed in order but there is no guarantee that it will be processed before cl
 after client A's request.\
 \
 \* this assumes that you can route requests from a client to the same container (e.g. if you are using AWS, you can set
-up your target group and load balancer to do so)
+up your target group and load balancer to do so - search for stickiness)
 
 ## Why I built Elasticsearch-Batcher
 I was initially toying around with AWS Firehose Delivery Streams to Elasticsearch but I hit a wall when I wanted to specify
